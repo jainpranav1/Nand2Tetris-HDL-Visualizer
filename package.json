@@ -8,6 +8,10 @@
   "engines": {
     "vscode": "^1.63.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jainpranav1/Nand2Tetris-HDL-Visualizer"
+  },
   "categories": [
     "Other"
   ],
