@@ -12,7 +12,8 @@ The nand2tetris hdl visualizer is a vs code extension that quickly generates bea
 ## Demo video
 The following video shows the extension in action: (https://www.youtube.com/watch?v=6lF45ffVOqo).
 
-![Mux8Way16.hdl](./images/screenshot1.png)
+## Example: Mux8Way16.hdl visualization
+![](/images/screenshot1.PNG)
 
 ## Credits
 
