@@ -3,6 +3,7 @@
   "displayName": "Nand2Tetris HDL Visualizer",
   "publisher": "PranavJain",
   "description": "",
+  "icon": "images/logo_small.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.63.0"
