@@ -4,7 +4,7 @@
   "publisher": "PranavJain",
   "description": "",
   "icon": "images/logo_small.png",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.63.0"
   },
@@ -47,6 +47,6 @@
     "express": "^4.17.2",
     "fs": "^0.0.1-security",
     "hdl-parser": "^1.0.1",
-    "socket.io": "^4.4.0"
+    "socket.io": "^4.4.1"
   }
 }

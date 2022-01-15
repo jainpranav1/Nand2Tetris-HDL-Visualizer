@@ -223,6 +223,7 @@ function activate(context) {
 			});
 		});
 
+		/*
 		// shorten names of sc pins and wires to 5 characters
 		doc_phdl["parts"].forEach(subchip => {
 			subchip["connections"].forEach(sc_pin => {
@@ -238,6 +239,7 @@ function activate(context) {
 				}				
 			});
 		});
+		*/
 
 		// add indices to split sc pin names (ex. a -> a[0:3])
 		doc_phdl["parts"].forEach(subchip => {
