@@ -2,9 +2,9 @@
   "name": "nand2tetris-hdl-visualizer",
   "displayName": "Nand2Tetris HDL Visualizer",
   "publisher": "PranavJain",
-  "description": "",
+  "description": "This tool can produce beautiful visualizations of your nand2tetris hdl files.",
   "icon": "images/logo_small.png",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "engines": {
     "vscode": "^1.63.0"
   },
@@ -46,7 +46,8 @@
   "dependencies": {
     "express": "^4.17.2",
     "fs": "^0.0.1-security",
-    "hdl-parser": "^1.0.1",
+    "hdl-parser": "^1.0.2",
+    "path": "^0.12.7",
     "socket.io": "^4.4.1"
   }
 }
