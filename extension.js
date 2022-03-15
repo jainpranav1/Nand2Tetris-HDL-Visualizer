@@ -6,11 +6,13 @@ const fs = require('fs');
 const bltin_chips_json = require("./bltin_chips.json");
 const express = require('express');
 const socket = require("socket.io");
+const path = require("path");
 
 // create server
 const app = express()
-let server = app.listen(3000);
-app.use(express.static(__dirname + '/public'));
+let port = 8080;
+let server = app.listen(port);
+app.use(express.static(path.join(__dirname, 'public')));
 
 // connect client and server with socket api
 let io = socket(server);
@@ -36,7 +38,7 @@ function activate(context) {
 		// get paths of current document and directory
 		let doc = vscode.window.activeTextEditor.document;
 		let doc_path = doc.uri.fsPath;
-		let dir_path = doc_path.substring(0, doc_path.lastIndexOf("\\"));
+		let dir_path = path.dirname(doc_path);
 
 		// check if document is hdl file
 		if (!doc_path.endsWith(".hdl")) {
@@ -86,7 +88,7 @@ function activate(context) {
 		// const flag (connected to constant: true, false)
 
 		let dir_names = fs.readdirSync(dir_path);
-		doc_phdl["parts"].forEach(subchip => {
+		for (let subchip of doc_phdl["parts"]) {
 						
 			// get dictionaries that map input/output sc pins to number of wires
 			// data comes from either sc pin doc or bltin_chip.json
@@ -96,7 +98,7 @@ function activate(context) {
 			let out_to_size = {};
 			if (dir_names.includes(subchip["name"] + ".hdl")) {
 
-				let sc_path = dir_path + "\\" + subchip["name"] + ".hdl";
+				let sc_path = path.join(dir_path, subchip["name"] + ".hdl");
 				let sc_text = fs.readFileSync(sc_path, 'utf8');
 				let sc_phdl = hdl_parser.parse(sc_text);
 
@@ -119,11 +121,13 @@ function activate(context) {
 			}
 			
 			else if (bltin_chips_json.hasOwnProperty(subchip["name"])) {
+
 				in_to_size = bltin_chips_json[subchip["name"]]["inputs"];
 				out_to_size = bltin_chips_json[subchip["name"]]["outputs"];
 			}
 
 			else {
+
 				vscode.window.showInformationMessage("Error: " + subchip["name"] + ".hdl file not present in current directory.");
 				return;
 			}
@@ -221,25 +225,7 @@ function activate(context) {
 					}
 				}
 			});
-		});
-
-		/*
-		// shorten names of sc pins and wires to 5 characters
-		doc_phdl["parts"].forEach(subchip => {
-			subchip["connections"].forEach(sc_pin => {
-				
-				if (sc_pin["from"]["pin"].length > 5) {
-					sc_pin["from"]["pin"] = sc_pin["from"]["pin"].slice(0, 5) + "...";
-				}
-
-				if (!sc_pin["const"]) {
-					if (sc_pin["to"]["pin"].length > 5) {
-						sc_pin["to"]["pin"] = sc_pin["to"]["pin"].slice(0, 5) + "...";
-					}					
-				}				
-			});
-		});
-		*/
+		}
 
 		// add indices to split sc pin names (ex. a -> a[0:3])
 		doc_phdl["parts"].forEach(subchip => {
@@ -399,7 +385,7 @@ function activate(context) {
 		hdelk.layout(graph, "diagram_id");
 		</script>
 		<script>
-		let socket = io.connect("http://localhost:3000");
+		let socket = io.connect("http://localhost:${port}");
 		socket.on('refresh', () => {
 			window.location.reload();
 		});
@@ -410,12 +396,12 @@ function activate(context) {
 		</body>
 		</html>`;
 
-		fs.writeFileSync(__dirname + '/public/index.html', html_str);
+		fs.writeFileSync(path.join(__dirname, 'public', 'index.html'), html_str);
 		//vscode.env.openExternal(__dirname + '/public/HDL_Visualization.html');
 		
 		// refresh page
 		if (io.engine.clientsCount == 0) {
-			vscode.env.openExternal('http://localhost:3000/');
+			vscode.env.openExternal('http://localhost:' + port + '/');
 		}
 		else {
 			io.sockets.emit("refresh");
@@ -428,7 +414,7 @@ function activate(context) {
 
 // this method is called when your extension is deactivated
 function deactivate() {
-	fs.writeFileSync(__dirname + '/public/index.html', "");
+	fs.writeFileSync(path.join(__dirname, 'public', 'index.html'), "");
 	io.sockets.emit("end");
 	io.sockets.close();
 	server.close(() => {
